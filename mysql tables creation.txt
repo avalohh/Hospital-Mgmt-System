@@ -1,0 +1,87 @@
+CREATE TABLE `admin` (
+  `idadmin` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  PRIMARY KEY (`idadmin`)
+) 
+
+CREATE TABLE `appointment` (
+  `idappointment` int NOT NULL AUTO_INCREMENT,
+  `purpose` varchar(45) NOT NULL,
+  `packageName` varchar(255) DEFAULT NULL,
+  `department` varchar(45) DEFAULT NULL,
+  `doctorName` varchar(45) DEFAULT NULL,
+  `date` date NOT NULL,
+  `idregister` int DEFAULT NULL,
+  `status` varchar(45) NOT NULL DEFAULT 'live',
+  PRIMARY KEY (`idappointment`),
+  KEY `idregister_idx` (`idregister`),
+  CONSTRAINT `idregister` FOREIGN KEY (`idregister`) REFERENCES `register` (`idregister`)
+) 
+
+CREATE TABLE `doctor` (
+  `iddoctor` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `contact` int NOT NULL,
+  `department` varchar(45) NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  PRIMARY KEY (`iddoctor`)
+)
+
+CREATE TABLE `feedback` (
+  `idfeedback` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `contact` int NOT NULL,
+  `feedback` mediumtext NOT NULL,
+  PRIMARY KEY (`idfeedback`)
+) 
+
+CREATE TABLE `package` (
+  `idpackage` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  `price` decimal(8,2) NOT NULL,
+  PRIMARY KEY (`idpackage`)
+)
+
+CREATE TABLE `packageorder` (
+  `idorder` int NOT NULL AUTO_INCREMENT,
+  `price` decimal(8,2) NOT NULL,
+  `idpackage` int NOT NULL,
+  `idregister` int NOT NULL,
+  `status` varchar(45) NOT NULL DEFAULT 'live',
+  `date` date NOT NULL,
+  PRIMARY KEY (`idorder`),
+  KEY `idpackage_idx` (`idpackage`),
+  KEY `idregister_idx` (`idregister`),
+  CONSTRAINT `idOrderRegister` FOREIGN KEY (`idregister`) REFERENCES `register` (`idregister`),
+  CONSTRAINT `idpackage` FOREIGN KEY (`idpackage`) REFERENCES `package` (`idpackage`)
+)
+
+CREATE TABLE `register` (
+  `idregister` int NOT NULL AUTO_INCREMENT,
+  `fname` varchar(45) NOT NULL,
+  `lname` varchar(45) NOT NULL,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `contact` int NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  PRIMARY KEY (`idregister`)
+)
+
+CREATE TABLE `report` (
+  `idreport` int NOT NULL AUTO_INCREMENT,
+  `idappointment` int NOT NULL,
+  `idregister` int NOT NULL,
+  `date` date NOT NULL,
+  `inoutPatient` varchar(45) NOT NULL,
+  `patientDetails` mediumtext NOT NULL,
+  `treatmentDetails` mediumtext NOT NULL,
+  PRIMARY KEY (`idreport`),
+  KEY `idappointment_idx` (`idappointment`),
+  KEY `idregister_idx` (`idregister`),
+  CONSTRAINT `idappointment` FOREIGN KEY (`idappointment`) REFERENCES `appointment` (`idappointment`),
+  CONSTRAINT `idrptregister` FOREIGN KEY (`idregister`) REFERENCES `register` (`idregister`)
+) 
